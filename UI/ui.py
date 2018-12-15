@@ -23,6 +23,35 @@ class MyFileBrowser(main.Ui_MainWindow, QtWidgets.QMainWindow):
         #text of word selected
         #self.wordtext.textChanged.connect(self.get_text_word)
         self.checkword.clicked.connect(self.get_text_word)
+        self.insertmeaning.clicked.connect(self.insertintomeanings)
+        self.insertexample.clicked.connect(self.insertintoexamples)
+
+    def insertintoexamples(self):
+        examplesadded=self.modifyexample.text()
+
+        numRows = self.exampleslist.rowCount()
+        self.exampleslist.insertRow(numRows)
+
+        self.exampleslist.setItem(numRows, 0, QtWidgets.QTableWidgetItem("Modify"))
+        self.exampleslist.setItem(numRows, 1, QtWidgets.QTableWidgetItem("SUPP"))
+        self.exampleslist.setItem(numRows, 2, QtWidgets.QTableWidgetItem(str(examplesadded)))
+
+
+
+    def insertintomeanings(self):
+        meaningadded=self.editmeaning.text()
+        print("meaning:added",meaningadded)
+
+
+        numRows = self.listmeaning.rowCount()
+        self.listmeaning.insertRow(numRows)
+
+        self.listmeaning.setItem(numRows, 0, QtWidgets.QTableWidgetItem("Modify"))
+        self.listmeaning.setItem(numRows, 1, QtWidgets.QTableWidgetItem("SUPP"))
+        self.listmeaning.setItem(numRows, 2, QtWidgets.QTableWidgetItem(str(meaningadded)))
+        #numRows = self.listmeaning.rowCount()
+
+
     def populate(self):
         path = r"/home/masterubunto/M2_gitprojects/historical_dictionary-/data/corpus"
         self.model = QtWidgets.QFileSystemModel()
@@ -74,22 +103,41 @@ class MyFileBrowser(main.Ui_MainWindow, QtWidgets.QMainWindow):
 
     def lanch_search(self,word,genre,period):
 
-        meanings=["blue","hi","honey","cool","k"]
-        examples=["la vie","est","belle"]
+        meanings=["blue","hi"]
+        examples=["blueblack","la vie","est","belle"]
         #appell fonction de xmlmanagement
-        model = QtGui.QStandardItemModel()
-        self.listmeaning.setModel(model)
 
-        for i in meanings:
-            item = QtGui.QStandardItem(i)
-            model.appendRow(item)
+        numRows = 0
+        self.listmeaning.setRowCount(0)
+        #self.listmeaning.insertRow(numRows)
+        self.listmeaning.setColumnCount(3)
 
-        model = QtGui.QStandardItemModel()
-        self.tableView.setModel(model)
+        # Create a empty row at bottom of table
 
-        for i in examples:
-            item = QtGui.QStandardItem(i)
-            model.appendRow(item)
+
+        for item in meanings:
+            self.listmeaning.insertRow(numRows)
+            self.listmeaning.setItem(numRows, 0, QtWidgets.QTableWidgetItem("Modify"))
+            self.listmeaning.setItem(numRows, 1, QtWidgets.QTableWidgetItem("SUPP"))
+            self.listmeaning.setItem(numRows, 2, QtWidgets.QTableWidgetItem(item))
+            numRows = self.listmeaning.rowCount()
+
+
+
+        #examples
+       # numRows=0
+        self.exampleslist.setRowCount(0);
+        self.exampleslist.setColumnCount(3)
+
+        # Create a empty row at bottom of table
+
+        for item in examples:
+            self.exampleslist.insertRow(numRows)
+            self.exampleslist.setItem(numRows, 0, QtWidgets.QTableWidgetItem("Modify"))
+            self.exampleslist.setItem(numRows, 1, QtWidgets.QTableWidgetItem("SUPP"))
+            self.exampleslist.setItem(numRows, 2, QtWidgets.QTableWidgetItem(item))
+            numRows = self.exampleslist.rowCount()
+
 
     def get_text_word(self):
         self.lanch_search(self.wordtext.toPlainText(),self.get_genre_selected(),self.get_period_selected())
